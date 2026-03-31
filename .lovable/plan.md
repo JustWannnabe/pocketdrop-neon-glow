@@ -1,61 +1,40 @@
 
 
-# Plan: Connect Supabase and Create Database Schema
+# Plan: Build the Upload Page (`/send`)
 
 ## Overview
-Set up Supabase backend with a `files` table and a public storage bucket for PocketDrop.
+Create a new `/send` page with file/text upload functionality, matching the dark neon theme. Includes drag-and-drop, file/text toggle, optional password, and code display after upload.
 
-## Step 1: Enable Supabase
-Connect a Supabase instance to the project (Lovable Cloud or external). This will generate the Supabase client integration files.
+## Files to Create
 
-## Step 2: Create migration for "files" table
-Create a SQL migration with the following schema:
+### 1. `src/pages/Send.tsx`
+Main upload page with:
+- **NeonParticles** background + same navbar as Index
+- **Toggle switch** ("Send File" / "Send Text") using the existing `Switch` component
+- **File mode**: Drag-and-drop zone with dashed cyan neon border (`border-dashed border-primary`), glow on hover/drag-over. Accepts all file types. Shows file name after selection.
+- **Text mode**: `Textarea` for pasting text content, styled with neon border
+- **Password field**: Optional `Input` with helper text "Add password = file never expires, otherwise deleted after 10 days"
+- **Upload button**: Neon cyan styled button, disabled while uploading, shows loading state
+- **Upload logic**:
+  - Generate random 6-digit numeric code (`Math.floor(100000 + Math.random() * 900000)`)
+  - For files: upload to `pocketdrop-files` bucket via `supabase.storage`, then insert metadata into `files` table
+  - For text: insert into `files` table with `is_text: true`, `text_content`, and placeholder `file_url`/`file_name`/`file_type`
+  - Set `expires_at` to 10 days from now if no password; `null` if password provided
+- **Success view**: Replace the form with the 6-digit code displayed in large glowing neon text (`font-display text-6xl text-primary neon-text-cyan`), with a "Copy Code" button and "Send Another" link
 
-```sql
-CREATE TABLE public.files (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  file_name TEXT NOT NULL,
-  file_url TEXT NOT NULL,
-  file_type TEXT NOT NULL,
-  code VARCHAR(6) UNIQUE NOT NULL,
-  password TEXT,
-  expires_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  is_text BOOLEAN DEFAULT false,
-  text_content TEXT
-);
+## Files to Modify
 
-ALTER TABLE public.files ENABLE ROW LEVEL SECURITY;
+### 2. `src/App.tsx`
+- Import `Send` page
+- Add route: `<Route path="/send" element={<Send />} />`
 
--- Allow anyone to read files by code (no auth required for receiving)
-CREATE POLICY "Anyone can read files" ON public.files
-  FOR SELECT USING (true);
+### 3. `src/pages/Index.tsx`
+- Wire "Send a File" button to navigate to `/send` using `Link` from react-router-dom
 
--- Allow anyone to insert files (no auth required for sending)
-CREATE POLICY "Anyone can insert files" ON public.files
-  FOR INSERT WITH CHECK (true);
-```
-
-## Step 3: Create storage bucket migration
-```sql
-INSERT INTO storage.buckets (id, name, public)
-VALUES ('pocketdrop-files', 'pocketdrop-files', true);
-
--- Allow public read access
-CREATE POLICY "Public read access" ON storage.objects
-  FOR SELECT USING (bucket_id = 'pocketdrop-files');
-
--- Allow public upload
-CREATE POLICY "Public upload access" ON storage.objects
-  FOR INSERT WITH CHECK (bucket_id = 'pocketdrop-files');
-```
-
-## Step 4: Wire up Supabase client
-Install `@supabase/supabase-js` and create the client integration files under `src/integrations/supabase/` with auto-generated types for the `files` table.
-
-## Technical Notes
-- RLS policies allow public read/insert since PocketDrop is a no-login file sharing app
-- The `code` column is unique and indexed for fast lookups
-- Storage bucket is public for direct file URL access
-- No update/delete policies for now (files are immutable once shared)
+## Technical Details
+- Use `supabase.storage.from('pocketdrop-files').upload()` for file storage
+- Use `supabase.from('files').insert()` for metadata
+- Generate public URL via `supabase.storage.from('pocketdrop-files').getPublicUrl()`
+- Handle drag events (`onDragOver`, `onDragLeave`, `onDrop`) for the drop zone
+- Toast errors on failure using existing sonner toaster
 
