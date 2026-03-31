@@ -1,4 +1,5 @@
 import { Upload, Hash, Download, ArrowRight } from "lucide-react";
+import NeonParticles from "@/components/NeonParticles";
 
 const steps = [
   { icon: Upload, label: "Upload", description: "Drop your file — any size, any type." },
@@ -9,6 +10,7 @@ const steps = [
 const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <NeonParticles />
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 border-b border-border bg-background/80 backdrop-blur-xl">
         <div className="container mx-auto flex items-center justify-between h-16 px-6">
@@ -23,7 +25,7 @@ const Index = () => {
       </nav>
 
       {/* Hero */}
-      <section className="relative flex flex-col items-center justify-center text-center min-h-screen px-6 overflow-hidden">
+      <section className="relative flex flex-col items-center justify-center text-center min-h-[110vh] px-6 pt-24 pb-16 overflow-hidden">
         {/* Background glow orbs */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-cyan/5 rounded-full blur-[120px] animate-pulse-glow" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neon-purple/5 rounded-full blur-[120px] animate-pulse-glow" />
@@ -57,7 +59,7 @@ const Index = () => {
             {steps.map((step, i) => (
               <div
                 key={step.label}
-                className="relative flex flex-col items-center text-center p-8 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors group"
+                className="relative flex flex-col items-center text-center p-8 rounded-xl bg-card/60 backdrop-blur-md border border-border hover:border-primary/30 hover:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.1)] transition-all duration-300 group"
               >
                 <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center mb-5 group-hover:neon-box-cyan transition-shadow">
                   <step.icon className="w-6 h-6 text-primary" />
