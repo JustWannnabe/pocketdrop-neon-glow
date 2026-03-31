@@ -44,9 +44,9 @@ const Index = () => {
           <Link to="/send" className="px-8 py-3 rounded-lg font-display font-bold text-sm tracking-wider bg-primary text-primary-foreground neon-box-cyan hover:brightness-110 transition-all">
             Send a File
           </Link>
-          <button className="px-8 py-3 rounded-lg font-display font-bold text-sm tracking-wider border border-accent text-accent neon-text-purple hover:bg-accent/10 transition-all">
+          <Link to="/get" className="px-8 py-3 rounded-lg font-display font-bold text-sm tracking-wider border border-accent text-accent neon-text-purple hover:bg-accent/10 transition-all">
             Receive a File
-          </button>
+          </Link>
         </div>
       </section>
 
