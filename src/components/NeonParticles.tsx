@@ -58,7 +58,7 @@ const NeonParticles = () => {
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = `hsla(${p.color},${p.opacity})`;
         ctx.shadowColor = `hsl(${p.color})`;
-        ctx.shadowBlur = p.size * 6;
+        ctx.shadowBlur = p.size * 12;
         ctx.fill();
         ctx.shadowBlur = 0;
       }
