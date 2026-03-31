@@ -36,11 +36,11 @@ const NeonParticles = () => {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 2.5 + 0.5,
+        size: Math.random() * 4 + 2,
         speedX: (Math.random() - 0.5) * 0.3,
         speedY: (Math.random() - 0.5) * 0.2,
         color: hsl,
-        opacity: Math.random() * 0.5 + 0.15,
+        opacity: Math.random() * 0.5 + 0.4,
       });
     }
 
