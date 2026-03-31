@@ -1,4 +1,5 @@
 import { Upload, Hash, Download, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import NeonParticles from "@/components/NeonParticles";
 
 const steps = [
