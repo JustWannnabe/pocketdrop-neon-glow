@@ -59,7 +59,7 @@ const Index = () => {
             {steps.map((step, i) => (
               <div
                 key={step.label}
-                className="relative flex flex-col items-center text-center p-8 rounded-xl bg-card border border-border hover:border-primary/40 transition-colors group"
+                className="relative flex flex-col items-center text-center p-8 rounded-xl bg-card/60 backdrop-blur-md border border-border hover:border-primary/30 hover:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.1)] transition-all duration-300 group"
               >
                 <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center mb-5 group-hover:neon-box-cyan transition-shadow">
                   <step.icon className="w-6 h-6 text-primary" />
