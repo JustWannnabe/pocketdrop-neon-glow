@@ -1,4 +1,5 @@
 import { Upload, Hash, Download, ArrowRight } from "lucide-react";
+import NeonParticles from "@/components/NeonParticles";
 
 const steps = [
   { icon: Upload, label: "Upload", description: "Drop your file — any size, any type." },
@@ -9,6 +10,7 @@ const steps = [
 const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <NeonParticles />
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 border-b border-border bg-background/80 backdrop-blur-xl">
         <div className="container mx-auto flex items-center justify-between h-16 px-6">
