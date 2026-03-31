@@ -1,40 +1,39 @@
 
 
-# Plan: Build the Upload Page (`/send`)
+# Plan: Build the Receive Page (`/get`)
 
 ## Overview
-Create a new `/send` page with file/text upload functionality, matching the dark neon theme. Includes drag-and-drop, file/text toggle, optional password, and code display after upload.
+Create a `/get` page where users enter a 6-digit code to retrieve shared files or text, with password protection support and error handling — all in the dark neon theme.
 
 ## Files to Create
 
-### 1. `src/pages/Send.tsx`
-Main upload page with:
-- **NeonParticles** background + same navbar as Index
-- **Toggle switch** ("Send File" / "Send Text") using the existing `Switch` component
-- **File mode**: Drag-and-drop zone with dashed cyan neon border (`border-dashed border-primary`), glow on hover/drag-over. Accepts all file types. Shows file name after selection.
-- **Text mode**: `Textarea` for pasting text content, styled with neon border
-- **Password field**: Optional `Input` with helper text "Add password = file never expires, otherwise deleted after 10 days"
-- **Upload button**: Neon cyan styled button, disabled while uploading, shows loading state
-- **Upload logic**:
-  - Generate random 6-digit numeric code (`Math.floor(100000 + Math.random() * 900000)`)
-  - For files: upload to `pocketdrop-files` bucket via `supabase.storage`, then insert metadata into `files` table
-  - For text: insert into `files` table with `is_text: true`, `text_content`, and placeholder `file_url`/`file_name`/`file_type`
-  - Set `expires_at` to 10 days from now if no password; `null` if password provided
-- **Success view**: Replace the form with the 6-digit code displayed in large glowing neon text (`font-display text-6xl text-primary neon-text-cyan`), with a "Copy Code" button and "Send Another" link
+### 1. `src/pages/Get.tsx`
+- Same layout shell as Send: `NeonParticles`, navbar with "PocketDrop" link, glow orbs
+- **States**: `idle` → `loading` → `password` → `result` → `error`
+- **Code input**: 6 individual `<input>` boxes (maxLength=1, numeric), auto-focus next on input, neon cyan border with glow on focus. Pre-fill from `?code=XXXXXX` URL param via `useSearchParams`
+- **"Get File" button**: Neon cyan styled, triggers lookup
+- **Lookup logic**:
+  - Query `supabase.from('files').select('*').eq('code', code).single()`
+  - If not found → red neon error "Invalid code"
+  - If `expires_at` is in the past → red neon "This file has expired"
+  - If `password` is set → show password input, validate on submit, red neon on mismatch
+  - Otherwise → show result
+- **Result view**:
+  - If `is_text`: show `text_content` in a neon-bordered box with "Copy Text" button
+  - If file: show `file_name` and a glowing cyan "Download" button linking to `file_url`
+- **Error styling**: Red text with `text-red-500` and red glow shadow
 
 ## Files to Modify
 
 ### 2. `src/App.tsx`
-- Import `Send` page
-- Add route: `<Route path="/send" element={<Send />} />`
+- Import `Get` page, add `<Route path="/get" element={<Get />} />`
 
 ### 3. `src/pages/Index.tsx`
-- Wire "Send a File" button to navigate to `/send` using `Link` from react-router-dom
+- Wire "Receive a File" button to `/get`
 
 ## Technical Details
-- Use `supabase.storage.from('pocketdrop-files').upload()` for file storage
-- Use `supabase.from('files').insert()` for metadata
-- Generate public URL via `supabase.storage.from('pocketdrop-files').getPublicUrl()`
-- Handle drag events (`onDragOver`, `onDragLeave`, `onDrop`) for the drop zone
-- Toast errors on failure using existing sonner toaster
+- Use 6 individual controlled inputs with refs array for auto-focus behavior
+- Parse `useSearchParams().get('code')` on mount to pre-fill
+- Password comparison is plain-text client-side (matches current schema)
+- Download uses `window.open(file_url)` or an `<a>` tag with `download` attribute
 
