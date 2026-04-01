@@ -108,6 +108,21 @@ const Get = () => {
     }
   };
 
+  const pasteFromClipboard = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      const extracted = text.replace(/\D/g, "").slice(0, 6);
+      if (extracted.length > 0) {
+        const next = Array(6).fill("");
+        extracted.split("").forEach((d, i) => { next[i] = d; });
+        setDigits(next);
+        inputRefs.current[Math.min(extracted.length, 5)]?.focus();
+      }
+    } catch {
+      toast.error("Unable to read clipboard.");
+    }
+  };
+
   const reset = () => {
     setDigits(Array(6).fill(""));
     setState("idle");
