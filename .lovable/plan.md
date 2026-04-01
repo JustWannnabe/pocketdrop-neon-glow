@@ -1,14 +1,18 @@
 
 
-## Plan: Add "Paste Code" Button on /get Page
+# Plan: Add QR Code to Send Page Success Screen
 
-### Changes
+## Overview
+Add a QR code and download button to the `/send` success screen after upload, encoding the receive URL.
 
-**`src/pages/Get.tsx`** (single edit):
-- Add a `pasteFromClipboard` function that calls `navigator.clipboard.readText()`, extracts up to 6 digits, and fills the `digits` state
-- Add a small neon purple outlined button labeled "Paste Code" with a `Clipboard` icon, placed below the 6 input boxes and above the error message
-- Style: `border border-accent text-accent text-xs neon-text-purple hover:bg-accent/10` — small, outlined, matching the purple neon theme
-- Import `Clipboard` icon from lucide-react
+## Dependencies
+Install `qrcode.react` package for QR code generation.
 
-**No changes needed to Index.tsx** — the "Receive a File" button already navigates to `/get`.
+## Changes to `src/pages/Send.tsx`
+
+1. **Import** `QRCodeCanvas` from `qrcode.react` and `Download` icon from `lucide-react`
+2. **In the success view** (the `code ?` branch, around line 95), add between the code display and the description text:
+   - A `QRCodeCanvas` rendering `${window.location.origin}/get?code=${code}`, wrapped in a styled container with white background, rounded corners, padding, and a neon cyan glow border (`shadow-[0_0_20px_hsl(var(--neon-cyan)/0.3)] border border-primary/40 rounded-xl bg-white p-4`)
+   - A "Download QR" button styled as a small neon purple outlined button, using a canvas-to-PNG download approach (`canvas.toDataURL('image/png')` → create temporary `<a>` link and click)
+3. **QR size**: 200×200px, with `ref` on the wrapping div to locate the canvas for download
 
