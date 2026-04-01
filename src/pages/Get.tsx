@@ -179,6 +179,15 @@ const Get = () => {
                 ))}
               </div>
 
+              <div className="flex justify-center">
+                <button
+                  onClick={pasteFromClipboard}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-display rounded-md border border-accent text-accent neon-text-purple hover:bg-accent/10 transition-all"
+                >
+                  <Clipboard className="w-3.5 h-3.5" /> Paste Code
+                </button>
+              </div>
+
               {error && (
                 <p className="text-center text-red-500 font-display text-sm" style={{ textShadow: "0 0 10px rgba(239,68,68,0.5)" }}>
                   {error}
