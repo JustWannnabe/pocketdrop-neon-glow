@@ -121,6 +121,23 @@ const Send = () => {
             <span className="font-display text-6xl md:text-8xl font-black text-primary neon-text-cyan tracking-[0.3em]">
               {code}
             </span>
+            <div ref={qrRef} className="bg-white p-4 rounded-xl border border-primary/40 shadow-[0_0_20px_hsl(var(--neon-cyan)/0.3)]">
+              <QRCodeCanvas value={`${window.location.origin}/get?code=${code}`} size={200} />
+            </div>
+            <button
+              onClick={() => {
+                const canvas = qrRef.current?.querySelector("canvas");
+                if (!canvas) return;
+                const url = canvas.toDataURL("image/png");
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `pocketdrop-${code}.png`;
+                a.click();
+              }}
+              className="px-4 py-2 rounded-lg font-display font-bold text-xs tracking-wider border border-accent text-accent neon-text-purple hover:bg-accent/10 transition-all flex items-center gap-2"
+            >
+              <Download className="w-4 h-4" /> Download QR
+            </button>
             <p className="text-muted-foreground text-sm max-w-xs">
               Share this code. {password ? "Password-protected — never expires." : "Expires in 10 days."}
             </p>
