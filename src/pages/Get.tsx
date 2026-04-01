@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { Download, Copy, ArrowLeft, Loader2 } from "lucide-react";
+import { Download, Copy, ArrowLeft, Loader2, Clipboard } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import NeonParticles from "@/components/NeonParticles";
 import { toast } from "sonner";
@@ -108,6 +108,21 @@ const Get = () => {
     }
   };
 
+  const pasteFromClipboard = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      const extracted = text.replace(/\D/g, "").slice(0, 6);
+      if (extracted.length > 0) {
+        const next = Array(6).fill("");
+        extracted.split("").forEach((d, i) => { next[i] = d; });
+        setDigits(next);
+        inputRefs.current[Math.min(extracted.length, 5)]?.focus();
+      }
+    } catch {
+      toast.error("Unable to read clipboard.");
+    }
+  };
+
   const reset = () => {
     setDigits(Array(6).fill(""));
     setState("idle");
@@ -162,6 +177,15 @@ const Get = () => {
                     className="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-display font-bold rounded-lg bg-muted/30 border border-primary/30 text-foreground focus:outline-none focus:border-primary focus:shadow-[0_0_15px_hsl(var(--neon-cyan)/0.3)] transition-all"
                   />
                 ))}
+              </div>
+
+              <div className="flex justify-center">
+                <button
+                  onClick={pasteFromClipboard}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-display rounded-md border border-accent text-accent neon-text-purple hover:bg-accent/10 transition-all"
+                >
+                  <Clipboard className="w-3.5 h-3.5" /> Paste Code
+                </button>
               </div>
 
               {error && (
