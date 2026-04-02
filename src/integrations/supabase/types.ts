@@ -26,6 +26,7 @@ export type Database = {
           is_text: boolean | null
           password: string | null
           text_content: string | null
+          user_id: string | null
         }
         Insert: {
           code: string
@@ -38,6 +39,7 @@ export type Database = {
           is_text?: boolean | null
           password?: string | null
           text_content?: string | null
+          user_id?: string | null
         }
         Update: {
           code?: string
@@ -50,6 +52,7 @@ export type Database = {
           is_text?: boolean | null
           password?: string | null
           text_content?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }

@@ -4,6 +4,7 @@ import { Upload, Copy, Check, FileText, Loader2, Download } from "lucide-react";
 import { QRCodeCanvas } from "qrcode.react";
 import { toast } from "sonner";
 import NeonParticles from "@/components/NeonParticles";
+import Navbar from "@/components/Navbar";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -61,6 +62,8 @@ const Send = () => {
         fileType = file!.type || "application/octet-stream";
       }
 
+      const { data: { session } } = await supabase.auth.getSession();
+
       const { error: dbError } = await supabase.from("files").insert({
         code: generatedCode,
         file_name: fileName,
@@ -70,6 +73,7 @@ const Send = () => {
         expires_at: expiresAt,
         is_text: isText,
         text_content: isText ? textContent : null,
+        user_id: session?.user?.id ?? null,
       });
       if (dbError) throw dbError;
 
@@ -100,16 +104,9 @@ const Send = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <NeonParticles />
-      <nav className="fixed top-0 w-full z-50 border-b border-border bg-background/80 backdrop-blur-xl">
-        <div className="container mx-auto flex items-center justify-between h-16 px-6">
-          <Link to="/" className="font-display text-xl font-bold text-primary neon-text-cyan tracking-wider">
-            PocketDrop
-          </Link>
-          <div className="flex gap-6 text-sm text-muted-foreground">
-            <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar>
+        <Link to="/" className="hover:text-primary transition-colors">Home</Link>
+      </Navbar>
 
       <section className="relative flex flex-col items-center justify-center min-h-screen px-6 pt-24 pb-16">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-cyan/5 rounded-full blur-[120px] animate-pulse-glow" />
