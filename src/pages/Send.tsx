@@ -62,6 +62,8 @@ const Send = () => {
         fileType = file!.type || "application/octet-stream";
       }
 
+      const { data: { session } } = await supabase.auth.getSession();
+
       const { error: dbError } = await supabase.from("files").insert({
         code: generatedCode,
         file_name: fileName,
@@ -71,6 +73,7 @@ const Send = () => {
         expires_at: expiresAt,
         is_text: isText,
         text_content: isText ? textContent : null,
+        user_id: session?.user?.id ?? null,
       });
       if (dbError) throw dbError;
 
