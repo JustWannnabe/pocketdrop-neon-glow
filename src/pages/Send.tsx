@@ -4,6 +4,7 @@ import { Upload, Copy, Check, FileText, Loader2, Download } from "lucide-react";
 import { QRCodeCanvas } from "qrcode.react";
 import { toast } from "sonner";
 import NeonParticles from "@/components/NeonParticles";
+import Navbar from "@/components/Navbar";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
