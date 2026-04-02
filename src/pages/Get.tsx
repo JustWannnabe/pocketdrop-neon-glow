@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Download, Copy, ArrowLeft, Loader2, Clipboard } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import NeonParticles from "@/components/NeonParticles";
+import Navbar from "@/components/Navbar";
 import { toast } from "sonner";
 
 type PageState = "idle" | "loading" | "password" | "result" | "error";
