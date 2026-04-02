@@ -1,6 +1,7 @@
 import { Upload, Hash, Download, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import NeonParticles from "@/components/NeonParticles";
+import Navbar from "@/components/Navbar";
 
 const steps = [
   { icon: Upload, label: "Upload", description: "Drop your file — any size, any type." },
@@ -12,22 +13,13 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <NeonParticles />
-      {/* Navbar */}
-      <nav className="fixed top-0 w-full z-50 border-b border-border bg-background/80 backdrop-blur-xl">
-        <div className="container mx-auto flex items-center justify-between h-16 px-6">
-          <span className="font-display text-xl font-bold text-primary neon-text-cyan tracking-wider">
-            PocketDrop
-          </span>
-          <div className="flex gap-6 text-sm text-muted-foreground">
-            <a href="#how" className="hover:text-primary transition-colors">How it works</a>
-            <a href="#" className="hover:text-primary transition-colors">About</a>
-          </div>
-        </div>
-      </nav>
+      <Navbar>
+        <a href="#how" className="hover:text-primary transition-colors">How it works</a>
+        <a href="#" className="hover:text-primary transition-colors">About</a>
+      </Navbar>
 
       {/* Hero */}
       <section className="relative flex flex-col items-center justify-center text-center min-h-screen px-6 pt-24 pb-16 overflow-hidden">
-        {/* Background glow orbs */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-cyan/5 rounded-full blur-[120px] animate-pulse-glow" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neon-purple/5 rounded-full blur-[120px] animate-pulse-glow" />
 

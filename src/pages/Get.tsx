@@ -137,17 +137,10 @@ const Get = () => {
     <div className="min-h-screen bg-background text-foreground">
       <NeonParticles />
 
-      <nav className="fixed top-0 w-full z-50 border-b border-border bg-background/80 backdrop-blur-xl">
-        <div className="container mx-auto flex items-center justify-between h-16 px-6">
-          <Link to="/" className="font-display text-xl font-bold text-primary neon-text-cyan tracking-wider">
-            PocketDrop
-          </Link>
-          <div className="flex gap-6 text-sm text-muted-foreground">
-            <Link to="/send" className="hover:text-primary transition-colors">Send</Link>
-            <Link to="/get" className="hover:text-primary transition-colors">Receive</Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar>
+        <Link to="/send" className="hover:text-primary transition-colors">Send</Link>
+        <Link to="/get" className="hover:text-primary transition-colors">Receive</Link>
+      </Navbar>
 
       <section className="relative flex flex-col items-center justify-center min-h-screen px-6 pt-24 pb-16">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-cyan/5 rounded-full blur-[120px] animate-pulse-glow" />
