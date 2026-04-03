@@ -19,6 +19,7 @@ const Send = () => {
   const [code, setCode] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const qrRef = useRef<HTMLDivElement>(null);
 
