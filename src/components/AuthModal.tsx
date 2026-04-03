@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
+import { Loader2, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -45,9 +45,14 @@ const AuthModal = ({ open, onOpenChange }: AuthModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-card border-border sm:max-w-md">
+      <DialogContent className="bg-background/90 backdrop-blur-xl border-primary/20 shadow-[0_0_30px_hsl(var(--neon-cyan)/0.1)] sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="font-display text-xl text-primary neon-text-cyan">
+          <div className="flex justify-center mb-2">
+            <div className="w-14 h-14 rounded-full border-2 border-primary/40 flex items-center justify-center" style={{ boxShadow: "0 0 20px hsl(var(--neon-cyan) / 0.3)" }}>
+              <Lock className="w-7 h-7 text-primary" style={{ filter: "drop-shadow(0 0 8px hsl(var(--neon-cyan) / 0.6))" }} />
+            </div>
+          </div>
+          <DialogTitle className="font-display text-xl text-primary neon-text-cyan text-center">
             {isSignUp ? "Create Account" : "Sign In"}
           </DialogTitle>
         </DialogHeader>
@@ -59,7 +64,7 @@ const AuthModal = ({ open, onOpenChange }: AuthModalProps) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="bg-muted/30 border-primary/30 focus:border-primary focus:shadow-[0_0_15px_hsl(var(--neon-cyan)/0.15)]"
+            className="bg-muted/30 border-primary/30 focus:border-primary focus:ring-1 focus:ring-primary/50 focus:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.25)]"
           />
           <Input
             type="password"
@@ -68,7 +73,7 @@ const AuthModal = ({ open, onOpenChange }: AuthModalProps) => {
             onChange={(e) => setPassword(e.target.value)}
             required
             minLength={6}
-            className="bg-muted/30 border-primary/30 focus:border-primary focus:shadow-[0_0_15px_hsl(var(--neon-cyan)/0.15)]"
+            className="bg-muted/30 border-primary/30 focus:border-primary focus:ring-1 focus:ring-primary/50 focus:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.25)]"
           />
 
           {error && (
