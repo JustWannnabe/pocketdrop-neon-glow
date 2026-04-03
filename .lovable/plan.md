@@ -1,26 +1,35 @@
 
 
-# Plan: Improve Auth UI and Navbar Profile Dropdown
+# Plan: Build /my-uploads Page
 
-## Changes
+## Overview
+Create a `/my-uploads` page for signed-in users to view and manage their uploaded files, with delete functionality and redirect for unauthenticated users.
 
-### 1. `src/components/AuthModal.tsx`
-- Add a glowing `Lock` icon (lucide-react) centered above the title, with neon cyan glow using `drop-shadow` and a circular border
-- Upgrade `DialogContent` styling: `bg-background/90 backdrop-blur-xl border-primary/20 shadow-[0_0_30px_hsl(var(--neon-cyan)/0.1)]`
-- Increase input focus glow intensity: `focus:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.25)]` and add `focus:ring-1 focus:ring-primary/50`
+## Database Migration
+Add a DELETE RLS policy so authenticated users can delete their own files:
+```sql
+CREATE POLICY "Users can delete own files"
+ON public.files FOR DELETE TO authenticated
+USING (user_id = auth.uid());
+```
 
-### 2. `src/components/Navbar.tsx`
-- Import `User`, `Upload`, `LogOut` icons, `DropdownMenu` components, and `useNavigate`
-- **Logged out**: Change "Sign In" button to neon cyan outlined style (`border-primary text-primary neon-text-cyan`)
-- **Logged in**: Replace email+SignOut text with a circular avatar button:
-  - `w-9 h-9 rounded-full border-2 border-primary` with cyan glow shadow
-  - `User` icon inside
-- Clicking avatar opens a `DropdownMenu` with dark neon styling (`bg-background/95 backdrop-blur-xl border-primary/20`):
-  - User email (greyed, `text-muted-foreground text-xs`, non-interactive label)
-  - Separator
-  - "My Uploads" item with `Upload` icon, navigates to `/my-uploads`
-  - "Sign Out" item with `LogOut` icon, styled red (`text-red-400`)
+## New File: `src/pages/MyUploads.tsx`
+- On mount, check auth state via `supabase.auth.getSession()`. If no session, redirect to `/` using `navigate("/")`
+- Query `supabase.from('files').select('*').eq('user_id', user.id).order('created_at', { ascending: false })`
+- Page layout: `NeonParticles` background, `<Navbar>`, page title "My Uploads" in neon cyan glow
+- **File cards** in a responsive grid, each showing:
+  - File name (or "Text Snippet" if `is_text`)
+  - 6-digit code in neon cyan
+  - Expiry status: green "Never expires" if password set, yellow "Expires: [date]" if future, red "Expired" if past
+  - "Copy Code" button (copies code to clipboard)
+  - "Delete" button (red neon) — deletes from storage bucket first (`supabase.storage.from('pocketdrop-files').remove([path])`), then deletes from `files` table (`supabase.from('files').delete().eq('id', file.id)`)
+- **Empty state**: centered message "No files uploaded yet" with a "Send a File" button linking to `/send`
 
-### 3. No new pages created
-The `/my-uploads` route will be a future addition; the menu item just navigates there.
+## Modified File: `src/App.tsx`
+- Import `MyUploads` and add route: `<Route path="/my-uploads" element={<MyUploads />} />`
+
+## Technical Notes
+- Extract storage path from `file_url` for deletion (parse the public URL to get the relative path)
+- For text-only entries (`is_text = true`), skip storage deletion since no file was uploaded to the bucket
+- Use `toast` for success/error feedback on delete
 
