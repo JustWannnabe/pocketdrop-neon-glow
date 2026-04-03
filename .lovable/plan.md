@@ -1,35 +1,27 @@
 
 
-# Plan: Build /my-uploads Page
+# Plan: Add Password Visibility Toggle
 
 ## Overview
-Create a `/my-uploads` page for signed-in users to view and manage their uploaded files, with delete functionality and redirect for unauthenticated users.
+Add an Eye/EyeOff toggle to password fields in the Auth modal and the Send page, positioned inside the input on the right side in neon cyan.
 
-## Database Migration
-Add a DELETE RLS policy so authenticated users can delete their own files:
-```sql
-CREATE POLICY "Users can delete own files"
-ON public.files FOR DELETE TO authenticated
-USING (user_id = auth.uid());
+## Changes
+
+### 1. `src/components/AuthModal.tsx`
+- Add `showPassword` state (`useState(false)`)
+- Import `Eye`, `EyeOff` from lucide-react
+- Wrap the password `<Input>` in a `relative` div
+- Change input type to `showPassword ? "text" : "password"`, add `pr-10` padding
+- Add an absolute-positioned button on the right with the Eye/EyeOff icon in `text-primary` with cyan glow
+
+### 2. `src/pages/Send.tsx`
+- Add `showPassword` state
+- Import `Eye`, `EyeOff` from lucide-react
+- Same pattern: wrap password Input in a `relative` div, toggle type, add icon button on the right
+
+### Icon button styling
 ```
-
-## New File: `src/pages/MyUploads.tsx`
-- On mount, check auth state via `supabase.auth.getSession()`. If no session, redirect to `/` using `navigate("/")`
-- Query `supabase.from('files').select('*').eq('user_id', user.id).order('created_at', { ascending: false })`
-- Page layout: `NeonParticles` background, `<Navbar>`, page title "My Uploads" in neon cyan glow
-- **File cards** in a responsive grid, each showing:
-  - File name (or "Text Snippet" if `is_text`)
-  - 6-digit code in neon cyan
-  - Expiry status: green "Never expires" if password set, yellow "Expires: [date]" if future, red "Expired" if past
-  - "Copy Code" button (copies code to clipboard)
-  - "Delete" button (red neon) — deletes from storage bucket first (`supabase.storage.from('pocketdrop-files').remove([path])`), then deletes from `files` table (`supabase.from('files').delete().eq('id', file.id)`)
-- **Empty state**: centered message "No files uploaded yet" with a "Send a File" button linking to `/send`
-
-## Modified File: `src/App.tsx`
-- Import `MyUploads` and add route: `<Route path="/my-uploads" element={<MyUploads />} />`
-
-## Technical Notes
-- Extract storage path from `file_url` for deletion (parse the public URL to get the relative path)
-- For text-only entries (`is_text = true`), skip storage deletion since no file was uploaded to the bucket
-- Use `toast` for success/error feedback on delete
+absolute right-3 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80
+```
+With `filter: drop-shadow(0 0 4px hsl(var(--neon-cyan) / 0.5))` for neon glow.
 
