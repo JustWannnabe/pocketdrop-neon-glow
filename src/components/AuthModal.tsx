@@ -67,15 +67,25 @@ const AuthModal = ({ open, onOpenChange }: AuthModalProps) => {
             required
             className="bg-muted/30 border-primary/30 focus:border-primary focus:ring-1 focus:ring-primary/50 focus:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.25)]"
           />
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-            className="bg-muted/30 border-primary/30 focus:border-primary focus:ring-1 focus:ring-primary/50 focus:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.25)]"
-          />
+          <div className="relative">
+            <Input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              className="bg-muted/30 border-primary/30 focus:border-primary focus:ring-1 focus:ring-primary/50 focus:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.25)] pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 transition-colors"
+              style={{ filter: "drop-shadow(0 0 4px hsl(var(--neon-cyan) / 0.5))" }}
+            >
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
 
           {error && (
             <p className="text-sm text-red-500" style={{ textShadow: "0 0 10px rgba(239,68,68,0.5)" }}>

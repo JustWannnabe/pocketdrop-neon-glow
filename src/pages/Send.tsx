@@ -213,13 +213,23 @@ const Send = () => {
               <label className="font-display text-xs text-muted-foreground tracking-wide uppercase">
                 Password (optional)
               </label>
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter a password..."
-                className="bg-card/60 backdrop-blur-md border-primary/20 focus:border-primary/50"
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter a password..."
+                  className="bg-card/60 backdrop-blur-md border-primary/20 focus:border-primary/50 pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 transition-colors"
+                  style={{ filter: "drop-shadow(0 0 4px hsl(var(--neon-cyan) / 0.5))" }}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
               <span className="text-xs text-muted-foreground">
                 Add password = file never expires, otherwise deleted after 10 days
               </span>
