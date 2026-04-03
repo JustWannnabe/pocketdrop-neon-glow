@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Upload, Copy, Check, FileText, Loader2, Download } from "lucide-react";
+import { Upload, Copy, Check, FileText, Loader2, Download, Eye, EyeOff } from "lucide-react";
 import { QRCodeCanvas } from "qrcode.react";
 import { toast } from "sonner";
 import NeonParticles from "@/components/NeonParticles";
