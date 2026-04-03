@@ -1,38 +1,26 @@
 
 
-# Plan: Add Optional User Authentication
+# Plan: Improve Auth UI and Navbar Profile Dropdown
 
-## Overview
-Add optional sign-in/sign-up via email+password. App remains fully anonymous by default. Signed-in users get their `user_id` saved with uploads.
+## Changes
 
-## Step 1: Database Migration
-Add nullable `user_id` column to `files` table:
-```sql
-ALTER TABLE public.files ADD COLUMN user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL;
-```
+### 1. `src/components/AuthModal.tsx`
+- Add a glowing `Lock` icon (lucide-react) centered above the title, with neon cyan glow using `drop-shadow` and a circular border
+- Upgrade `DialogContent` styling: `bg-background/90 backdrop-blur-xl border-primary/20 shadow-[0_0_30px_hsl(var(--neon-cyan)/0.1)]`
+- Increase input focus glow intensity: `focus:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.25)]` and add `focus:ring-1 focus:ring-primary/50`
 
-## Step 2: Create `src/components/AuthModal.tsx`
-A dialog modal with:
-- Toggle between "Sign In" and "Sign Up" modes
-- Email + password fields styled in dark neon theme (cyan borders, purple accents)
-- Submit button, error display, close button
-- Uses `supabase.auth.signInWithPassword()` and `supabase.auth.signUp()`
+### 2. `src/components/Navbar.tsx`
+- Import `User`, `Upload`, `LogOut` icons, `DropdownMenu` components, and `useNavigate`
+- **Logged out**: Change "Sign In" button to neon cyan outlined style (`border-primary text-primary neon-text-cyan`)
+- **Logged in**: Replace email+SignOut text with a circular avatar button:
+  - `w-9 h-9 rounded-full border-2 border-primary` with cyan glow shadow
+  - `User` icon inside
+- Clicking avatar opens a `DropdownMenu` with dark neon styling (`bg-background/95 backdrop-blur-xl border-primary/20`):
+  - User email (greyed, `text-muted-foreground text-xs`, non-interactive label)
+  - Separator
+  - "My Uploads" item with `Upload` icon, navigates to `/my-uploads`
+  - "Sign Out" item with `LogOut` icon, styled red (`text-red-400`)
 
-## Step 3: Create `src/components/Navbar.tsx`
-Extract the repeated navbar into a shared component:
-- Listens to `supabase.auth.onAuthStateChange()` for session state
-- If signed out: shows "Sign In" button that opens AuthModal
-- If signed in: shows truncated email + "Sign Out" button
-- Accepts optional children or props for page-specific nav links (e.g. "How it works" on Index, "Home" on Send/Get)
-
-## Step 4: Update all pages
-Replace inline `<nav>` in `Index.tsx`, `Send.tsx`, and `Get.tsx` with the shared `<Navbar>` component.
-
-## Step 5: Update `Send.tsx` upload logic
-Before inserting into `files` table, check for active session via `supabase.auth.getSession()`. If user is signed in, include `user_id` in the insert. If not, omit it (null).
-
-## Technical Notes
-- No profile table needed — only storing `user_id` on files, no extra user data
-- RLS policies remain unchanged (public insert/select) since auth is optional
-- Email confirmation will use default behavior (users must verify email)
+### 3. No new pages created
+The `/my-uploads` route will be a future addition; the menu item just navigates there.
 
