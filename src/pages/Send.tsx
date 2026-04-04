@@ -35,11 +35,14 @@ const Send = () => {
   const handleUpload = async () => {
     if (!isText && !file) return toast.error("Please select a file.");
     if (isText && !textContent.trim()) return toast.error("Please enter some text.");
+    if (!isText && file && file.size > 50 * 1024 * 1024) {
+      return toast.error("File too large! Maximum size is 50MB");
+    }
 
     setUploading(true);
     try {
       const generatedCode = String(Math.floor(100000 + Math.random() * 900000));
-      const expiresAt = password ? null : new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString();
+      const expiresAtValue = password ? null : new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString();
 
       let fileUrl = "";
       let fileName = "";
