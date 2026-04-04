@@ -286,13 +286,25 @@ const Send = () => {
               </span>
             </div>
 
-            <button
-              onClick={handleUpload}
-              disabled={uploading}
-              className="w-full px-8 py-3 rounded-lg font-display font-bold text-sm tracking-wider bg-primary text-primary-foreground neon-box-cyan hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {uploading ? <><Loader2 className="w-4 h-4 animate-spin" /> Uploading...</> : "Upload"}
-            </button>
+            {uploading && !isText ? (
+              <div className="w-full flex flex-col gap-3 p-4 rounded-xl bg-card/60 backdrop-blur-md border border-primary/30 shadow-[0_0_20px_hsl(var(--neon-cyan)/0.15)]">
+                <Progress
+                  value={uploadProgress}
+                  className="h-3 bg-muted/50 [&>div]:bg-primary [&>div]:shadow-[0_0_10px_hsl(var(--neon-cyan)/0.6)]"
+                />
+                <p className="text-center text-sm font-display font-bold text-primary neon-text-cyan">
+                  Uploading... {uploadProgress}%
+                </p>
+              </div>
+            ) : (
+              <button
+                onClick={handleUpload}
+                disabled={uploading}
+                className="w-full px-8 py-3 rounded-lg font-display font-bold text-sm tracking-wider bg-primary text-primary-foreground neon-box-cyan hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {uploading ? <><Loader2 className="w-4 h-4 animate-spin" /> Uploading...</> : "Upload"}
+              </button>
+            )}
           </div>
         )}
       </section>
