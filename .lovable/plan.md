@@ -1,23 +1,38 @@
 
 
-# Plan: File Size Check + Expiry Countdown on /send
+# Plan: Upload Progress Bar on /send Page
+
+## Overview
+Replace the upload button with a neon cyan progress bar during file uploads, showing real-time percentage. Text mode skips the progress bar entirely.
+
+## Challenge
+The Supabase JS client's `storage.upload()` doesn't support `onUploadProgress`. We'll use `XMLHttpRequest` directly against the Supabase Storage REST API to get upload progress events.
 
 ## Changes to `src/pages/Send.tsx`
 
-### 1. File size validation (50MB limit)
-- At the top of `handleUpload`, before `setUploading(true)`, add a check: if `!isText && file && file.size > 50 * 1024 * 1024`, show `toast.error("File too large! Maximum size is 50MB")` and return early
-- No UI change needed beyond the toast error
+### New state
+- `uploadProgress: number` (0–100) to track percentage
 
-### 2. Expiry countdown timer
-- Add state: `expiresAt` (string | null) to store the expiry timestamp when upload succeeds (set it alongside `setCode`)
-- Add `useEffect` that runs when `code` and `expiresAt` are set (no password): calculates remaining time, updates a `countdown` state string every 60 seconds using `setInterval`
-- Format: "Expires in: X days Y hours Z minutes"
-- Display the countdown below the code (replacing or alongside the existing static "Expires in 10 days" text), styled in yellow neon: `text-yellow-400` with `drop-shadow(0 0 6px ...)`
-- If password-protected (`expiresAt` is null), show nothing extra (keep existing "Password-protected" text)
+### Upload logic change (file mode only)
+- Replace `supabase.storage.from(...).upload(path, file)` with a custom XHR upload:
+  - `PUT` to `${SUPABASE_URL}/storage/v1/object/pocketdrop-files/${path}`
+  - Headers: `Authorization: Bearer <anon_key>`, `Content-Type: <file.type>`
+  - `xhr.upload.onprogress` updates `uploadProgress` state
+  - Wrapped in a Promise that resolves/rejects on load/error
+- Text mode: no progress bar, goes straight to success as before
 
-### Technical details
-- Import `useEffect` (already partially imported via `useState`)
-- New state: `expiresAt: string | null`, `countdown: string`
-- Interval cleanup in useEffect return
-- Countdown calculation: diff between `expiresAt` date and `Date.now()`, extract days/hours/minutes
+### UI change
+- When `uploading` is true and `!isText`: hide the Upload button, show instead:
+  - A styled `<Progress>` component (from `src/components/ui/progress.tsx`) with neon cyan styling
+  - Text below: "Uploading... 45%" in cyan
+  - Container with dark background, rounded corners, neon glow border
+- When `uploading` is true and `isText`: show a simple spinner/loading state (existing behavior)
+
+### Reset
+- Reset `uploadProgress` to 0 in the `reset()` function
+
+## Technical Notes
+- XHR upload uses the anon key from `import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY` and the URL from `import.meta.env.VITE_SUPABASE_URL`
+- The `getPublicUrl` call remains unchanged after upload completes
+- Progress component gets custom className for neon cyan indicator styling
 
