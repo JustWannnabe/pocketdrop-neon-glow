@@ -21,6 +21,7 @@ const Send = () => {
   const [copied, setCopied] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [expiresAt, setExpiresAt] = useState<string | null>(null);
   const [countdown, setCountdown] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
