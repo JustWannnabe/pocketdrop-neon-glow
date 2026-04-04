@@ -57,10 +57,25 @@ const Send = () => {
       } else {
         const ext = file!.name.split(".").pop();
         const path = `${crypto.randomUUID()}.${ext}`;
-        const { error: storageError } = await supabase.storage
-          .from("pocketdrop-files")
-          .upload(path, file!);
-        if (storageError) throw storageError;
+
+        // Use XHR for upload progress tracking
+        await new Promise<void>((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+              setUploadProgress(Math.round((e.loaded / e.total) * 100));
+            }
+          };
+          xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) resolve();
+            else reject(new Error(`Upload failed with status ${xhr.status}`));
+          };
+          xhr.onerror = () => reject(new Error("Upload failed"));
+          xhr.open("PUT", `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/pocketdrop-files/${path}`);
+          xhr.setRequestHeader("Authorization", `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`);
+          xhr.setRequestHeader("Content-Type", file!.type || "application/octet-stream");
+          xhr.send(file!);
+        });
 
         const { data: urlData } = supabase.storage
           .from("pocketdrop-files")
