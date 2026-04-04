@@ -100,12 +100,29 @@ const Send = () => {
     }
   };
 
+  useEffect(() => {
+    if (!code || !expiresAt) return;
+    const calc = () => {
+      const diff = new Date(expiresAt).getTime() - Date.now();
+      if (diff <= 0) { setCountdown("Expired"); return; }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      setCountdown(`Expires in: ${days} days ${hours} hours ${minutes} minutes`);
+    };
+    calc();
+    const id = setInterval(calc, 60000);
+    return () => clearInterval(id);
+  }, [code, expiresAt]);
+
   const reset = () => {
     setCode(null);
     setFile(null);
     setTextContent("");
     setPassword("");
     setIsText(false);
+    setExpiresAt(null);
+    setCountdown("");
   };
 
   return (
