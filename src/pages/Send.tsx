@@ -76,7 +76,7 @@ const Send = () => {
         file_url: fileUrl,
         file_type: fileType,
         password: password || null,
-        expires_at: expiresAt,
+        expires_at: expiresAtValue,
         is_text: isText,
         text_content: isText ? textContent : null,
         user_id: session?.user?.id ?? null,
@@ -84,6 +84,7 @@ const Send = () => {
       if (dbError) throw dbError;
 
       setCode(generatedCode);
+      setExpiresAt(expiresAtValue);
     } catch (err: any) {
       toast.error(err.message || "Upload failed.");
     } finally {
