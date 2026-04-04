@@ -34,6 +34,10 @@ const Get = () => {
     }
   }, [searchParams]);
 
+  useEffect(() => {
+    supabase.functions.invoke('cleanup-files').catch(() => {});
+  }, []);
+
   const handleDigitChange = (index: number, value: string) => {
     if (!/^\d?$/.test(value)) return;
     const next = [...digits];
