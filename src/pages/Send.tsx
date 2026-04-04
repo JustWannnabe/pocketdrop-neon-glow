@@ -106,6 +106,7 @@ const Send = () => {
       toast.error(err.message || "Upload failed.");
     } finally {
       setUploading(false);
+      setUploadProgress(0);
     }
   };
 
