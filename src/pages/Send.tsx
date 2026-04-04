@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Upload, Copy, Check, FileText, Loader2, Download, Eye, EyeOff } from "lucide-react";
 import { QRCodeCanvas } from "qrcode.react";
