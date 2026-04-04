@@ -141,6 +141,7 @@ const Send = () => {
     setIsText(false);
     setExpiresAt(null);
     setCountdown("");
+    setUploadProgress(0);
   };
 
   return (
