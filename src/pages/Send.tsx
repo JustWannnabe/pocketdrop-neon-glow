@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Upload, Copy, Check, FileText, Loader2, Download, Eye, EyeOff } from "lucide-react";
 import { QRCodeCanvas } from "qrcode.react";
@@ -20,6 +20,8 @@ const Send = () => {
   const [copied, setCopied] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [expiresAt, setExpiresAt] = useState<string | null>(null);
+  const [countdown, setCountdown] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const qrRef = useRef<HTMLDivElement>(null);
 
@@ -33,11 +35,14 @@ const Send = () => {
   const handleUpload = async () => {
     if (!isText && !file) return toast.error("Please select a file.");
     if (isText && !textContent.trim()) return toast.error("Please enter some text.");
+    if (!isText && file && file.size > 50 * 1024 * 1024) {
+      return toast.error("File too large! Maximum size is 50MB");
+    }
 
     setUploading(true);
     try {
       const generatedCode = String(Math.floor(100000 + Math.random() * 900000));
-      const expiresAt = password ? null : new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString();
+      const expiresAtValue = password ? null : new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString();
 
       let fileUrl = "";
       let fileName = "";
@@ -71,7 +76,7 @@ const Send = () => {
         file_url: fileUrl,
         file_type: fileType,
         password: password || null,
-        expires_at: expiresAt,
+        expires_at: expiresAtValue,
         is_text: isText,
         text_content: isText ? textContent : null,
         user_id: session?.user?.id ?? null,
@@ -79,6 +84,7 @@ const Send = () => {
       if (dbError) throw dbError;
 
       setCode(generatedCode);
+      setExpiresAt(expiresAtValue);
     } catch (err: any) {
       toast.error(err.message || "Upload failed.");
     } finally {
@@ -94,12 +100,29 @@ const Send = () => {
     }
   };
 
+  useEffect(() => {
+    if (!code || !expiresAt) return;
+    const calc = () => {
+      const diff = new Date(expiresAt).getTime() - Date.now();
+      if (diff <= 0) { setCountdown("Expired"); return; }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      setCountdown(`Expires in: ${days} days ${hours} hours ${minutes} minutes`);
+    };
+    calc();
+    const id = setInterval(calc, 60000);
+    return () => clearInterval(id);
+  }, [code, expiresAt]);
+
   const reset = () => {
     setCode(null);
     setFile(null);
     setTextContent("");
     setPassword("");
     setIsText(false);
+    setExpiresAt(null);
+    setCountdown("");
   };
 
   return (
@@ -136,9 +159,18 @@ const Send = () => {
             >
               <Download className="w-4 h-4" /> Download QR
             </button>
-            <p className="text-muted-foreground text-sm max-w-xs">
-              Share this code. {password ? "Password-protected — never expires." : "Expires in 10 days."}
-            </p>
+            {password ? (
+              <p className="text-muted-foreground text-sm max-w-xs">
+                Share this code. Password-protected — never expires.
+              </p>
+            ) : (
+              <p
+                className="text-yellow-400 text-sm font-display font-bold max-w-xs"
+                style={{ filter: "drop-shadow(0 0 6px rgba(250, 204, 21, 0.5))" }}
+              >
+                {countdown}
+              </p>
+            )}
             <div className="flex gap-4">
               <button
                 onClick={copyCode}
