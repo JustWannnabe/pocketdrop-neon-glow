@@ -159,9 +159,18 @@ const Send = () => {
             >
               <Download className="w-4 h-4" /> Download QR
             </button>
-            <p className="text-muted-foreground text-sm max-w-xs">
-              Share this code. {password ? "Password-protected — never expires." : "Expires in 10 days."}
-            </p>
+            {password ? (
+              <p className="text-muted-foreground text-sm max-w-xs">
+                Share this code. Password-protected — never expires.
+              </p>
+            ) : (
+              <p
+                className="text-yellow-400 text-sm font-display font-bold max-w-xs"
+                style={{ filter: "drop-shadow(0 0 6px rgba(250, 204, 21, 0.5))" }}
+              >
+                {countdown}
+              </p>
+            )}
             <div className="flex gap-4">
               <button
                 onClick={copyCode}
