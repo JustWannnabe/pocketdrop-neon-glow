@@ -1,26 +1,23 @@
 
 
-# Plan: Cleanup Edge Function + Background Trigger
+# Plan: File Size Check + Expiry Countdown on /send
 
-## Overview
-Create a `cleanup-files` edge function that purges expired and overflow files, and silently invoke it when users visit `/get`.
+## Changes to `src/pages/Send.tsx`
 
-## New File: `supabase/functions/cleanup-files/index.ts`
+### 1. File size validation (50MB limit)
+- At the top of `handleUpload`, before `setUploading(true)`, add a check: if `!isText && file && file.size > 50 * 1024 * 1024`, show `toast.error("File too large! Maximum size is 50MB")` and return early
+- No UI change needed beyond the toast error
 
-- Import CORS headers, create a Supabase admin client using `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`
-- **Step 1**: Query expired rows: `expires_at < now()` AND `password IS NULL`
-- **Step 2**: For each expired row where `is_text` is false, extract the storage path from `file_url` and delete from `pocketdrop-files` bucket
-- **Step 3**: Delete all expired rows from `files` table matching the same condition
-- **Step 4**: Count total rows in `files`. If > 500, query the oldest 100 rows where `password IS NULL` ordered by `created_at ASC`, delete their storage files, then delete the rows
-- Handle CORS preflight, return JSON with counts of deleted items
-- No JWT validation needed (public cleanup endpoint, no sensitive data returned)
+### 2. Expiry countdown timer
+- Add state: `expiresAt` (string | null) to store the expiry timestamp when upload succeeds (set it alongside `setCode`)
+- Add `useEffect` that runs when `code` and `expiresAt` are set (no password): calculates remaining time, updates a `countdown` state string every 60 seconds using `setInterval`
+- Format: "Expires in: X days Y hours Z minutes"
+- Display the countdown below the code (replacing or alongside the existing static "Expires in 10 days" text), styled in yellow neon: `text-yellow-400` with `drop-shadow(0 0 6px ...)`
+- If password-protected (`expiresAt` is null), show nothing extra (keep existing "Password-protected" text)
 
-## Modified File: `src/pages/Get.tsx`
-
-- Add a `useEffect` that fires once on mount, calling `supabase.functions.invoke('cleanup-files')` silently (no await, no UI feedback, fire-and-forget inside a `.catch(() => {})`)
-
-## Technical Notes
-- Storage path extraction: parse `file_url` to get the path after `/object/public/pocketdrop-files/`
-- Use service role key server-side to bypass RLS for deletion
-- The cleanup call is best-effort — errors are silently ignored on the client
+### Technical details
+- Import `useEffect` (already partially imported via `useState`)
+- New state: `expiresAt: string | null`, `countdown: string`
+- Interval cleanup in useEffect return
+- Countdown calculation: diff between `expiresAt` date and `Date.now()`, extract days/hours/minutes
 
