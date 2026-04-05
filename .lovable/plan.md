@@ -1,38 +1,24 @@
 
 
-# Plan: Upload Progress Bar on /send Page
+# Plan: Z-Index Fix, Mobile Layout, and Particle Adjustments
 
-## Overview
-Replace the upload button with a neon cyan progress bar during file uploads, showing real-time percentage. Text mode skips the progress bar entirely.
+## 1. NeonParticles.tsx — Particle adjustments
+- Change `COUNT` from `40` → `80` (2x particles)
+- Change `size` from `Math.random() * 4 + 2` → `Math.random() * 2 + 1` (50% smaller)
+- Change `speedX` from `(Math.random() - 0.5) * 0.3` → `(Math.random() - 0.5) * 0.6` (2x speed)
+- Change `speedY` from `(Math.random() - 0.5) * 0.2` → `(Math.random() - 0.5) * 0.4` (2x speed)
 
-## Challenge
-The Supabase JS client's `storage.upload()` doesn't support `onUploadProgress`. We'll use `XMLHttpRequest` directly against the Supabase Storage REST API to get upload progress events.
+## 2. Index.tsx — Z-index wrapper + mobile layout
+- Wrap everything after `<NeonParticles />` (Navbar, hero, how-it-works, footer) in `<div className="relative z-10">`
+- Hero section: change `min-h-screen` → `min-h-[70vh]` to remove gap before "How It Works"
+- Hero buttons: change `flex-col sm:flex-row` → `flex-row` and add `w-full max-w-sm` on container, `flex-1 text-center` on each Link for equal-width side-by-side layout
 
-## Changes to `src/pages/Send.tsx`
+## 3. Send.tsx — Z-index wrapper
+- Wrap everything after `<NeonParticles />` (line 149) in `<div className="relative z-10">`
 
-### New state
-- `uploadProgress: number` (0–100) to track percentage
+## 4. Get.tsx — Z-index wrapper
+- Wrap everything after `<NeonParticles />` (line 142) in `<div className="relative z-10">`
 
-### Upload logic change (file mode only)
-- Replace `supabase.storage.from(...).upload(path, file)` with a custom XHR upload:
-  - `PUT` to `${SUPABASE_URL}/storage/v1/object/pocketdrop-files/${path}`
-  - Headers: `Authorization: Bearer <anon_key>`, `Content-Type: <file.type>`
-  - `xhr.upload.onprogress` updates `uploadProgress` state
-  - Wrapped in a Promise that resolves/rejects on load/error
-- Text mode: no progress bar, goes straight to success as before
-
-### UI change
-- When `uploading` is true and `!isText`: hide the Upload button, show instead:
-  - A styled `<Progress>` component (from `src/components/ui/progress.tsx`) with neon cyan styling
-  - Text below: "Uploading... 45%" in cyan
-  - Container with dark background, rounded corners, neon glow border
-- When `uploading` is true and `isText`: show a simple spinner/loading state (existing behavior)
-
-### Reset
-- Reset `uploadProgress` to 0 in the `reset()` function
-
-## Technical Notes
-- XHR upload uses the anon key from `import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY` and the URL from `import.meta.env.VITE_SUPABASE_URL`
-- The `getPublicUrl` call remains unchanged after upload completes
-- Progress component gets custom className for neon cyan indicator styling
+## 5. MyUploads.tsx — Z-index wrapper
+- Wrap everything after `<NeonParticles />` in `<div className="relative z-10">` (decorative blur divs, Navbar, and main all inside)
 
