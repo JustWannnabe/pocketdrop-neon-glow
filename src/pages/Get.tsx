@@ -141,6 +141,7 @@ const Get = () => {
     <div className="min-h-screen bg-background text-foreground">
       <NeonParticles />
 
+      <div className="relative z-10">
       <Navbar>
         <Link to="/send" className="hover:text-primary transition-colors">Send</Link>
         <Link to="/get" className="hover:text-primary transition-colors">Receive</Link>
@@ -262,6 +263,7 @@ const Get = () => {
           )}
         </div>
       </section>
+      </div>
     </div>
   );
 };

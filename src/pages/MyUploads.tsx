@@ -88,6 +88,7 @@ const MyUploads = () => {
   return (
     <div className="relative min-h-screen bg-background text-foreground overflow-hidden">
       <NeonParticles />
+      <div className="relative z-10">
       <div className="pointer-events-none absolute top-[-120px] left-1/2 -translate-x-1/2 w-[600px] h-[340px] rounded-full bg-primary/10 blur-[120px]" />
       <div className="pointer-events-none absolute bottom-[-80px] right-[-100px] w-[400px] h-[300px] rounded-full bg-accent/10 blur-[100px]" />
 
@@ -166,6 +167,7 @@ const MyUploads = () => {
           </div>
         )}
       </main>
+      </div>
     </div>
   );
 };
