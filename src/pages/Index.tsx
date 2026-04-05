@@ -13,13 +13,14 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <NeonParticles />
+      <div className="relative z-10">
       <Navbar>
         <a href="#how" className="hover:text-primary transition-colors">How it works</a>
         <a href="#" className="hover:text-primary transition-colors">About</a>
       </Navbar>
 
       {/* Hero */}
-      <section className="relative flex flex-col items-center justify-center text-center min-h-screen px-6 pt-24 pb-16 overflow-hidden">
+      <section className="relative flex flex-col items-center justify-center text-center min-h-[70vh] px-6 pt-24 pb-16 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-cyan/5 rounded-full blur-[120px] animate-pulse-glow" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neon-purple/5 rounded-full blur-[120px] animate-pulse-glow" />
 
@@ -32,11 +33,11 @@ const Index = () => {
         <p className="mt-6 text-lg text-muted-foreground max-w-md relative z-10">
           Encrypted, anonymous file sharing with auto-expiring links. Just drop and go.
         </p>
-        <div className="mt-10 flex flex-col sm:flex-row gap-4 relative z-10">
-          <Link to="/send" className="px-8 py-3 rounded-lg font-display font-bold text-sm tracking-wider bg-primary text-primary-foreground neon-box-cyan hover:brightness-110 transition-all">
+        <div className="mt-10 flex flex-row gap-4 w-full max-w-sm relative z-10">
+          <Link to="/send" className="flex-1 text-center px-8 py-3 rounded-lg font-display font-bold text-sm tracking-wider bg-primary text-primary-foreground neon-box-cyan hover:brightness-110 transition-all">
             Send a File
           </Link>
-          <Link to="/get" className="px-8 py-3 rounded-lg font-display font-bold text-sm tracking-wider border border-accent text-accent neon-text-purple hover:bg-accent/10 transition-all">
+          <Link to="/get" className="flex-1 text-center px-8 py-3 rounded-lg font-display font-bold text-sm tracking-wider border border-accent text-accent neon-text-purple hover:bg-accent/10 transition-all">
             Receive a File
           </Link>
         </div>
@@ -77,6 +78,7 @@ const Index = () => {
           © 2026 <span className="text-primary neon-text-cyan">PocketDrop</span>. All rights reserved.
         </span>
       </footer>
+      </div>
     </div>
   );
 };

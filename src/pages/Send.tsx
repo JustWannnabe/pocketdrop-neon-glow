@@ -147,6 +147,7 @@ const Send = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <NeonParticles />
+      <div className="relative z-10">
       <Navbar>
         <Link to="/" className="hover:text-primary transition-colors">Home</Link>
       </Navbar>
@@ -308,6 +309,7 @@ const Send = () => {
           </div>
         )}
       </section>
+      </div>
     </div>
   );
 };
