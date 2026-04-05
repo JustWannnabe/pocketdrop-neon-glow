@@ -21,7 +21,7 @@ const NeonParticles = () => {
 
     let animationId: number;
     const particles: Particle[] = [];
-    const COUNT = 40;
+    const COUNT = 80;
     const colors = ["183,100%,50%", "288,100%,50%"];
 
     const resize = () => {
