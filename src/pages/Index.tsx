@@ -24,7 +24,7 @@ const Index = () => {
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-cyan/5 rounded-full blur-[120px] animate-pulse-glow" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neon-purple/5 rounded-full blur-[120px] animate-pulse-glow" />
 
-        <h1 className="font-display text-5xl md:text-7xl font-black tracking-tight leading-tight relative z-10">
+        <h1 className="font-display text-3xl md:text-5xl lg:text-7xl font-black tracking-tight leading-tight relative z-10">
           <span className="text-primary neon-text-cyan">Share files.</span>
           <br />
           <span className="text-foreground">No login. </span>
