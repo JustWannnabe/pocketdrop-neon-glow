@@ -1,15 +1,18 @@
 
 
-# Plan: Fix Homepage Spacing, Hero Text, and Navbar on Mobile
+# Plan: Match Homepage Button Styles
 
-## 1. `src/pages/Index.tsx` — Reduce hero/section gap + responsive hero text
+## Change in `src/pages/Index.tsx`
 
-- **Hero section** (line 23): reduce bottom padding from `pb-16` to `pb-8`
-- **How It Works section** (line 47): reduce top padding from `py-24` to `py-12 md:py-24`
-- **Hero h1** (line 27): change `text-5xl md:text-7xl` to `text-3xl md:text-5xl lg:text-7xl` so it doesn't wrap to 3 lines on mobile
+**Line 37** — Add `border border-primary` to the "Send a File" Link so it matches the "Receive a File" button's border box model:
 
-## 2. `src/components/Navbar.tsx` — Hide nav links on small screens
+```
+// Before
+className="flex-1 text-center px-8 py-3 rounded-lg font-display font-bold text-sm tracking-wider bg-primary text-primary-foreground neon-box-cyan hover:brightness-110 transition-all"
 
-- Wrap the `{children}` slot in a `<div className="hidden sm:flex items-center gap-6">` so "How it works" and "About" links are hidden on mobile, leaving only the Sign In button visible
-- Keep the Sign In / avatar button outside this wrapper so it's always visible
+// After
+className="flex-1 text-center px-8 py-3 rounded-lg font-display font-bold text-sm tracking-wider border border-primary bg-primary text-primary-foreground neon-box-cyan hover:brightness-110 transition-all"
+```
+
+This ensures both buttons have identical sizing (same border, padding, font, and border-radius), differing only in color scheme.
 
