@@ -20,11 +20,11 @@ const Index = () => {
       </Navbar>
 
       {/* Hero */}
-      <section className="relative flex flex-col items-center justify-center text-center min-h-[70vh] px-6 pt-24 pb-16 overflow-hidden">
+      <section className="relative flex flex-col items-center justify-center text-center min-h-[70vh] px-6 pt-24 pb-8 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-cyan/5 rounded-full blur-[120px] animate-pulse-glow" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neon-purple/5 rounded-full blur-[120px] animate-pulse-glow" />
 
-        <h1 className="font-display text-5xl md:text-7xl font-black tracking-tight leading-tight relative z-10">
+        <h1 className="font-display text-3xl md:text-5xl lg:text-7xl font-black tracking-tight leading-tight relative z-10">
           <span className="text-primary neon-text-cyan">Share files.</span>
           <br />
           <span className="text-foreground">No login. </span>
@@ -44,7 +44,7 @@ const Index = () => {
       </section>
 
       {/* How it works */}
-      <section id="how" className="py-24 px-6">
+      <section id="how" className="py-12 md:py-24 px-6">
         <div className="container mx-auto max-w-4xl">
           <h2 className="font-display text-3xl font-bold text-center text-primary neon-text-cyan mb-16 tracking-wide">
             How It Works
