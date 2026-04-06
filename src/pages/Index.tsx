@@ -33,11 +33,11 @@ const Index = () => {
         <p className="mt-6 text-lg text-muted-foreground max-w-md relative z-10">
           Encrypted, anonymous file sharing with auto-expiring links. Just drop and go.
         </p>
-        <div className="mt-10 flex flex-row gap-4 w-full max-w-sm relative z-10">
-          <Link to="/send" className="flex-1 text-center px-8 py-3 rounded-lg font-display font-bold text-sm tracking-wider border border-primary bg-primary text-primary-foreground neon-box-cyan hover:brightness-110 transition-all">
+        <div className="mt-10 grid grid-cols-2 gap-4 w-full max-w-sm relative z-10">
+          <Link to="/send" className="flex items-center justify-center text-center px-4 py-3 min-h-[3.5rem] rounded-lg font-display font-bold text-sm tracking-wider border border-primary bg-primary text-primary-foreground neon-box-cyan hover:brightness-110 transition-all">
             Send a File
           </Link>
-          <Link to="/get" className="flex-1 text-center px-8 py-3 rounded-lg font-display font-bold text-sm tracking-wider border border-accent text-accent neon-text-purple hover:bg-accent/10 transition-all">
+          <Link to="/get" className="flex items-center justify-center text-center px-4 py-3 min-h-[3.5rem] rounded-lg font-display font-bold text-sm tracking-wider border border-accent text-accent neon-text-purple hover:bg-accent/10 transition-all">
             Receive a File
           </Link>
         </div>
