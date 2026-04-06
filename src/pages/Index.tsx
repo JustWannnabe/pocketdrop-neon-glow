@@ -20,7 +20,7 @@ const Index = () => {
       </Navbar>
 
       {/* Hero */}
-      <section className="relative flex flex-col items-center justify-center text-center min-h-[70vh] px-6 pt-24 pb-16 overflow-hidden">
+      <section className="relative flex flex-col items-center justify-center text-center min-h-[70vh] px-6 pt-24 pb-8 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-cyan/5 rounded-full blur-[120px] animate-pulse-glow" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neon-purple/5 rounded-full blur-[120px] animate-pulse-glow" />
 
