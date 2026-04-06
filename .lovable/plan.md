@@ -1,24 +1,15 @@
 
 
-# Plan: Z-Index Fix, Mobile Layout, and Particle Adjustments
+# Plan: Fix Homepage Spacing, Hero Text, and Navbar on Mobile
 
-## 1. NeonParticles.tsx — Particle adjustments
-- Change `COUNT` from `40` → `80` (2x particles)
-- Change `size` from `Math.random() * 4 + 2` → `Math.random() * 2 + 1` (50% smaller)
-- Change `speedX` from `(Math.random() - 0.5) * 0.3` → `(Math.random() - 0.5) * 0.6` (2x speed)
-- Change `speedY` from `(Math.random() - 0.5) * 0.2` → `(Math.random() - 0.5) * 0.4` (2x speed)
+## 1. `src/pages/Index.tsx` — Reduce hero/section gap + responsive hero text
 
-## 2. Index.tsx — Z-index wrapper + mobile layout
-- Wrap everything after `<NeonParticles />` (Navbar, hero, how-it-works, footer) in `<div className="relative z-10">`
-- Hero section: change `min-h-screen` → `min-h-[70vh]` to remove gap before "How It Works"
-- Hero buttons: change `flex-col sm:flex-row` → `flex-row` and add `w-full max-w-sm` on container, `flex-1 text-center` on each Link for equal-width side-by-side layout
+- **Hero section** (line 23): reduce bottom padding from `pb-16` to `pb-8`
+- **How It Works section** (line 47): reduce top padding from `py-24` to `py-12 md:py-24`
+- **Hero h1** (line 27): change `text-5xl md:text-7xl` to `text-3xl md:text-5xl lg:text-7xl` so it doesn't wrap to 3 lines on mobile
 
-## 3. Send.tsx — Z-index wrapper
-- Wrap everything after `<NeonParticles />` (line 149) in `<div className="relative z-10">`
+## 2. `src/components/Navbar.tsx` — Hide nav links on small screens
 
-## 4. Get.tsx — Z-index wrapper
-- Wrap everything after `<NeonParticles />` (line 142) in `<div className="relative z-10">`
-
-## 5. MyUploads.tsx — Z-index wrapper
-- Wrap everything after `<NeonParticles />` in `<div className="relative z-10">` (decorative blur divs, Navbar, and main all inside)
+- Wrap the `{children}` slot in a `<div className="hidden sm:flex items-center gap-6">` so "How it works" and "About" links are hidden on mobile, leaving only the Sign In button visible
+- Keep the Sign In / avatar button outside this wrapper so it's always visible
 
