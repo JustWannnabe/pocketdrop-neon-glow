@@ -44,7 +44,7 @@ const Index = () => {
       </section>
 
       {/* How it works */}
-      <section id="how" className="py-24 px-6">
+      <section id="how" className="py-12 md:py-24 px-6">
         <div className="container mx-auto max-w-4xl">
           <h2 className="font-display text-3xl font-bold text-center text-primary neon-text-cyan mb-16 tracking-wide">
             How It Works

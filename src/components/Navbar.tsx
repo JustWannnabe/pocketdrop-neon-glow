@@ -40,7 +40,9 @@ const Navbar = ({ children }: NavbarProps) => {
             PocketDrop
           </Link>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            {children}
+            <div className="hidden sm:flex items-center gap-6">
+              {children}
+            </div>
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
