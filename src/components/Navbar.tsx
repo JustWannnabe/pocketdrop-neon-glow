@@ -37,7 +37,7 @@ const Navbar = ({ children }: NavbarProps) => {
       <nav className="fixed top-0 w-full z-50 border-b border-border bg-background/80 backdrop-blur-xl">
         <div className="container mx-auto flex items-center justify-between h-16 px-6">
           <Link to="/" className="font-display text-xl font-bold text-primary neon-text-cyan tracking-wider">
-            PocketDrop
+            FileMover
           </Link>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
             <div className="hidden sm:flex items-center gap-6">
