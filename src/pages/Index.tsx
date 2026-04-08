@@ -75,7 +75,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t border-border py-8 text-center">
         <span className="font-display text-sm text-muted-foreground tracking-wider">
-          © 2026 <span className="text-primary neon-text-cyan">© 2026 <span className="text-primary neon-text-cyan">FileMover</span>. All rights reserved.</span>. All rights reserved.
+          © 2026 <span className="text-primary neon-text-cyan">FileMover</span>. All rights reserved.
         </span>
       </footer>
       </div>
