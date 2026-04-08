@@ -172,7 +172,7 @@ const Send = () => {
                 const url = canvas.toDataURL("image/png");
                 const a = document.createElement("a");
                 a.href = url;
-                a.download = `a.download = `filemover-${code}.png`;`;
+                a.download = `filemover-${code}.png`;
                 a.click();
               }}
               className="px-4 py-2 rounded-lg font-display font-bold text-xs tracking-wider border border-accent text-accent neon-text-purple hover:bg-accent/10 transition-all flex items-center gap-2"
